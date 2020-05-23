@@ -14,7 +14,5 @@ public class LinuxProcessManagerTest extends TestCase {
     public void testGetProcessList() throws IOException {
         LOGGER.info("Starting Test");
         LinuxProcessManager manager = new LinuxProcessManager(List.of("deepak"));
-        manager.getProcessList();
-
     }
 }

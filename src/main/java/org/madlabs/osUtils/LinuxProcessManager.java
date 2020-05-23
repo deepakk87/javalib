@@ -24,9 +24,7 @@ public class LinuxProcessManager {
     private static final Path PROC_STAT_FILE_PATH = Paths.get("/proc/stat");
     private static final Pattern  PROCESS_ID_PATH_PATTERN = Pattern.compile("/proc/\\d+");
     private static final String STAT_FILE_NAME = "stat";
-
     private final Set<String> users;
-
 
     public LinuxProcessManager(List<String> users) {
         this.users = Set.copyOf(users);
@@ -37,7 +35,7 @@ public class LinuxProcessManager {
  * 4096 65536 0 0 0 17 1 0 0 9 0 0 94670542822712 94670542839824 94670564933632 140736560015910
  * 140736560015929 140736560015929 140736560017381 0
  * */
-    public SystemInfoSnapshot getSystemInfoSnapshot() throws IOException {
+    public List<ProcessSnapshot> getProcessList() throws IOException {
         List<ProcessSnapshot> processSnapshots = new ArrayList<>();
         try (DirectoryStream<Path> paths = Files.newDirectoryStream(PROC_DIR_PATH, new DirectoryStream.Filter<Path>() {
             @Override
@@ -86,6 +84,10 @@ public class LinuxProcessManager {
                 }
             }
         }
+        return processSnapshots;
+    }
+
+    public SystemInfoSnapshot getSystemInfoSnapshot() throws IOException {
         long totalTime = 0;
         long idleTime;
         try (InputStream fis = Files.newInputStream(PROC_STAT_FILE_PATH)) {
@@ -107,7 +109,7 @@ public class LinuxProcessManager {
             totalTime += readLong(fis);
             totalTime += readLong(fis);
         }
-        return new SystemInfoSnapshot(processSnapshots, totalTime, idleTime);
+        return new SystemInfoSnapshot(totalTime, idleTime);
     }
 
     private static int readInt(InputStream in) throws IOException {
