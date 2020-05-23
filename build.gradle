@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group 'org.madlib'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.3'
+
+}
